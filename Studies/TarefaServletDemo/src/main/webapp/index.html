@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Formulário de Tarefa</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<header>
+		<h1>Formulário de Tarefa</h1>
+	</header>
+	<main>
+		<form action="hello" method="POST">
+		
+			<section>
+				<label for="nomeTarefa">Nome da Tarefa:</label> <input type="text"
+					id="nomeTarefa" name="nome">
+			</section>
+			
+			<section>
+				<label for="descricaoTarefa">Descrição da Tarefa:</label>
+				<textarea id="descricaoTarefa" name="descricao" rows="3"></textarea>
+			</section>
+		
+			<section class="checkbox">
+				<input type="checkbox" id="semanal" name="periodo" value="semanal">
+				<label for="semanal">Semanal</label>
+			</section>
+			
+			<section class="checkbox">
+				<input type="checkbox" id="diaria" name="periodo" value="diaria">
+				<label for="diaria">Diária</label>
+			</section>
+			
+			<section class="checkbox">
+				<input type="checkbox" id="unica" name="periodo" value="unica">
+				<label for="unica">Única</label>
+			</section>
+			
+			<input type="submit" value="Enviar">
+		</form>
+	</main>
+</body>
+</html>
