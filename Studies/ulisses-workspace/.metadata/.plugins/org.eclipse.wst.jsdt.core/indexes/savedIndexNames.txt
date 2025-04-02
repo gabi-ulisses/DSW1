@@ -1,3 +1,0 @@
-INDEX VERSION 1.4+/home/aluno/ulisses-workspace/.metadata/.plugins/org.eclipse.wst.jsdt.core/indexes
-2128333297.index
-560708115.index

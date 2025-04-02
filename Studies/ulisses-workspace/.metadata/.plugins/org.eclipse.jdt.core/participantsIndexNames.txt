@@ -1,3 +1,0 @@
-INDEX VERSION 1.134
-/home/aluno/ulisses-workspace/.metadata/.plugins/org.eclipse.jst.jsp.core/jspsearch/2128333297.index
-/HellowWorld/src/main/java
