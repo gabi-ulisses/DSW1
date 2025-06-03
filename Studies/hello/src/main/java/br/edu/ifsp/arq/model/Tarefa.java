@@ -4,52 +4,45 @@ import java.io.Serializable;
 
 public class Tarefa implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private String descricao;
-	private String nome;
-	private static int proximo_id = 0;
-	private int id;
+    private int id;
+    private String nome;
+    private String descricao;
 
-	private Tarefa() {
-		this.id = ++proximo_id;
-	}
-	
-	public Tarefa(int id, String n, String d) {
-		this.id = id;
-		this.nome = n;
-		this.descricao = d;
-	}
+    public Tarefa(int id, String nome, String descricao) {
+        this.id = id;
+        this.nome = nome;
+        this.descricao = descricao;
+    }
 
-	public Tarefa(String n, String d) {
-		this();
-		this.descricao = d;
-		this.nome = n;
-	}
+    public Tarefa(String nome, String descricao) {
+        this(0, nome, descricao); // id será atribuído pelo DAO
+    }
 
-	public int getId() {
-		return this.id;
-	}
+    // Getters e setters
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
+    public String getNome() {
+        return nome;
+    }
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+    public String getDescricao() {
+        return descricao;
+    }
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
 
-	public String getDescricao() {
-		return descricao;
-	}
-
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	@Override
-	public String toString() {
-		return this.id + ";" + this.nome + ";" + this.descricao;
-	}
-
+    // toString para CSV (id;nome;descricao)
+    @Override
+    public String toString() {
+        return id + ";" + nome + ";" + descricao;
+    }
 }
