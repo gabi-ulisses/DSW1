@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enviar Dados</title>
+    <script src="form.js" defer></script>
+</head>
+<body>
+    <h2>Formulário de Envio</h2>
+    <form id="data-form">
+        <label for="title">Título:</label>
+        <input type="text" id="title" name="title" required><br><br>
+
+        <label for="body">Conteúdo:</label>
+        <textarea id="body" name="body" required></textarea><br><br>
+
+        <label for="userId">ID do Usuário:</label>
+        <input type="number" id="userId" name="userId" required><br><br>
+
+        <button type="submit">Enviar</button>
+    </form>
+
+    <p id="response-message"></p>
+</body>
+</html>
