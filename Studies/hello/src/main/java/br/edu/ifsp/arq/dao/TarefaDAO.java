@@ -1,49 +1,57 @@
 package br.edu.ifsp.arq.dao;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+import com.google.gson.Gson;
 
 import br.edu.ifsp.arq.model.Tarefa;
 
-public class TarefaDAO_CSV {
+public class TarefaDAO {
 
-    private static final String CAMINHO_ARQUIVO = "data/tarefas.csv";
-    private static TarefaDAO_CSV instance;
+    private static TarefaDAO instance;
 
-    private TarefaDAO_CSV() {
-        File pasta = new File("data");
-        if (!pasta.exists()) {
-            pasta.mkdirs();
+    // Caminho relativo para o arquivo
+    private static final String ARQUIVO = "data/saida.json";
+
+    private TarefaDAO() {
+        // Cria o diretório "data" se não existir
+        File dir = new File("data");
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
+        // Cria o arquivo "saida.json" se não existir
+        File f = new File(ARQUIVO);
+        if (!f.exists()) {
+            try {
+                f.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    public static synchronized TarefaDAO_CSV getInstance() {
+    public static TarefaDAO getInstance() {
         if (instance == null) {
-            instance = new TarefaDAO_CSV();
+            instance = new TarefaDAO();
         }
         return instance;
     }
 
-    // Gera novo ID único baseado no maior ID atual + 1
-    private int gerarNovoId() {
-        int maxId = 0;
-        List<Tarefa> tarefas = getTarefas();
-
-        if (tarefas != null) {
-            for (Tarefa t : tarefas) {
-                if (t.getId() > maxId) maxId = t.getId();
-            }
-        }
-        return maxId + 1;
-    }
-
-    public synchronized boolean adicionarTarefa(Tarefa t) {
-        t.setId(gerarNovoId());
-
-        try (FileWriter fw = new FileWriter(CAMINHO_ARQUIVO, StandardCharsets.UTF_8, true);
+    public boolean adicionarTarefa(Tarefa t) {
+        Gson gson = new Gson();
+        try (FileWriter fw = new FileWriter(ARQUIVO, StandardCharsets.UTF_8, true);
              PrintWriter pw = new PrintWriter(fw)) {
-            pw.println(t);
+            String json = gson.toJson(t);
+            pw.println(json);
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -51,83 +59,73 @@ public class TarefaDAO_CSV {
         return true;
     }
 
-    public synchronized List<Tarefa> getTarefas() {
-        File arquivo = new File(CAMINHO_ARQUIVO);
-        List<Tarefa> lista = new ArrayList<>();
-
-        if (!arquivo.exists()) return lista;
-
-        try (FileReader fr = new FileReader(arquivo);
+    public ArrayList<Tarefa> getTarefas() {
+        File f = new File(ARQUIVO);
+        ArrayList<Tarefa> lista = new ArrayList<>();
+        Gson gson = new Gson();
+        try (FileReader fr = new FileReader(f);
              Scanner sc = new Scanner(fr)) {
-
             while (sc.hasNextLine()) {
                 String linha = sc.nextLine();
-                String[] campos = linha.split(";");
-                if (campos.length >= 3) {
-                    int id = Integer.parseInt(campos[0]);
-                    String nome = campos[1];
-                    String descricao = campos[2];
-                    lista.add(new Tarefa(id, nome, descricao));
-                }
+                Tarefa t = gson.fromJson(linha, Tarefa.class);
+                lista.add(t);
             }
+        } catch (FileNotFoundException e) {
+            // arquivo pode não existir ainda, retorna lista vazia
         } catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
         return lista;
     }
 
-	public boolean editarTarefa(Tarefa t) {
-    List<Tarefa> tarefas = getTarefas();
-    boolean encontrado = false;
-
-    for (int i = 0; i < tarefas.size(); i++) {
-        if (tarefas.get(i).getId() == t.getId()) {
-            tarefas.set(i, t);  // substitui a tarefa antiga pela atualizada
-            encontrado = true;
-            break;
-        }
-    }
-
-    if (!encontrado) {
-        return false;  // não encontrou tarefa com esse ID
-    }
-
-    // salva toda a lista atualizada no CSV
-    return salvarListaNoCSV(tarefas);
-}
-
-
-    public synchronized boolean excluirTarefa(int id) {
-        List<Tarefa> tarefas = getTarefas();
-        boolean removido = tarefas.removeIf(t -> t.getId() == id);
-        if (!removido) return false;
-        return salvarListaNoCSV(tarefas);
-    }
-
-    private boolean salvarListaNoCSV(List<Tarefa> tarefas) {
-        try (PrintWriter pw = new PrintWriter(new FileWriter(CAMINHO_ARQUIVO, StandardCharsets.UTF_8, false))) {
-            for (Tarefa t : tarefas) {
-                pw.println(t);
+    // Salvar toda a lista no arquivo sobrescrevendo o conteúdo existente
+    private boolean salvarLista(ArrayList<Tarefa> lista) {
+        Gson gson = new Gson();
+        try (FileWriter fw = new FileWriter(ARQUIVO, StandardCharsets.UTF_8, false);
+             PrintWriter pw = new PrintWriter(fw)) {
+            for (Tarefa t : lista) {
+                String json = gson.toJson(t);
+                pw.println(json);
             }
-            return true;
         } catch (IOException e) {
             e.printStackTrace();
             return false;
         }
+        return true;
     }
 
-	public Tarefa buscarPorId(int id) {
-    List<Tarefa> tarefas = getTarefas();
-    if (tarefas == null) {
-        return null;
-    }
-
-    for (Tarefa t : tarefas) {
-        if (t.getId() == id) {
-            return t;
+    // Editar tarefa com base no id
+    public boolean editarTarefa(Tarefa tEditada) {
+        ArrayList<Tarefa> lista = getTarefas();
+        if (lista == null) {
+            return false;
         }
+        boolean encontrou = false;
+        for (int i = 0; i < lista.size(); i++) {
+            Tarefa t = lista.get(i);
+            if (t.getId() == tEditada.getId()) {
+                lista.set(i, tEditada);
+                encontrou = true;
+                break;
+            }
+        }
+        if (!encontrou) {
+            return false;
+        }
+        return salvarLista(lista);
     }
-    return null; // não encontrou
-}
 
+    // Excluir tarefa pelo id
+    public boolean excluirTarefa(int id) {
+        ArrayList<Tarefa> lista = getTarefas();
+        if (lista == null) {
+            return false;
+        }
+        boolean removido = lista.removeIf(t -> t.getId() == id);
+        if (!removido) {
+            return false;
+        }
+        return salvarLista(lista);
+    }
 }

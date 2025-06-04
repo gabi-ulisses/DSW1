@@ -1,27 +1,24 @@
-<%@ page contentType="text/html; charset=UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ include file="header.jsp" %>
 
-<c:import url="header.jsp" />
+<div class="container">
+    <h2>Editar Tarefa</h2>
 
-    <h2 id="formTitle" class="mb-4">Editar Tarefa</h2>
-
-    <form action="editar" method="post" novalidate>
-        <input type="hidden" name="id" value="${tarefa.id}" />
-
-        <div class="form-group">
-            <label for="nome" class="font-weight-bold">Nome</label>
-            <input type="text" id="nome" name="nome" value="${tarefa.nome}" class="form-control" required aria-required="true" aria-describedby="nomeHelp" />
-            <small id="nomeHelp" class="form-text text-muted">Informe o nome da tarefa.</small>
+    <form action="tarefa" method="post">
+        <input type="hidden" name="acao" value="editar">
+        <input type="hidden" name="id" value="${tarefa.id}">
+        
+        <div class="mb-3">
+            <label for="nome" class="form-label">Nome:</label>
+            <input type="text" class="form-control" id="nome" name="nome" value="${tarefa.nome}" required>
         </div>
 
-        <div class="form-group">
-            <label for="descricao" class="font-weight-bold">Descrição</label>
-            <textarea id="descricao" name="descricao" class="form-control" required aria-required="true" aria-describedby="descricaoHelp">${tarefa.descricao}</textarea>
-            <small id="descricaoHelp" class="form-text text-muted">Informe a descrição da tarefa.</small>
+        <div class="mb-3">
+            <label for="descricao" class="form-label">Descri��o:</label>
+            <textarea class="form-control" id="descricao" name="descricao" required>${tarefa.descricao}</textarea>
         </div>
 
-        <button type="submit" class="btn btn-primary">Salvar</button>
+        <button type="submit" class="btn btn-warning">Atualizar Tarefa</button>
     </form>
-</main>
+</div>
 
-<c:import url="footer.jsp" />
+<%@ include file="footer.jsp" %>

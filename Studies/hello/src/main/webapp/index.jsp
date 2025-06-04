@@ -1,23 +1,22 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ include file="header.jsp" %>
 
-<c:import url="header.jsp" />
-
-    <h1 id="pageTitle" class="mb-4">Cadastro de Tarefa</h1>
-
-    <form action="tarefa" method="POST" novalidate>
-        <div class="form-row">
-            <div class="form-group col-md-6">
-                <label for="nome">Nome</label>
-                <input type="text" id="nome" name="nome" class="form-control" value="${param.nome}" required />
-            </div>
-            <div class="form-group col-md-6">
-                <label for="descricao">DescriÃ§Ã£o</label>
-                <input type="text" id="descricao" name="descricao" class="form-control" value="${param.descricao}" required />
-            </div>
+<div class="container">
+    <h2>Criar Nova Tarefa</h2>
+    <form action="tarefa" method="post">
+        <input type="hidden" name="acao" value="adicionar">
+        
+        <div class="mb-3">
+            <label for="nome" class="form-label">Nome:</label>
+            <input type="text" class="form-control" id="nome" name="nome" required>
         </div>
-        <button type="submit" class="btn btn-primary mt-3">Enviar</button>
-    </form>
-</main>
 
-<c:import url="footer.jsp" />
+        <div class="mb-3">
+            <label for="descricao" class="form-label">Descrição:</label>
+            <textarea class="form-control" id="descricao" name="descricao" required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Criar Tarefa</button>
+    </form>
+</div>
+
+<%@ include file="footer.jsp" %>

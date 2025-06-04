@@ -1,43 +1,36 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ include file="header.jsp" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<c:import url="header.jsp" />
+<div class="container">
+    <h2>Lista de Tarefas</h2>
 
-    <h1 id="pageTitle" class="mb-4">Lista de Tarefas</h1>
+    <c:if test="${not empty mensagem}">
+        <div class="alert ${classe}" role="alert">
+            ${mensagem}
+        </div>
+    </c:if>
 
-    <c:choose>
-        <c:when test="${not empty lista}">
-            <table class="table table-striped table-hover" aria-describedby="tabelaDescricao">
-                <caption id="tabelaDescricao" class="sr-only">
-                    Tabela com as tarefas cadastradas e opções para editar e excluir
-                </caption>
-                <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Nome</th>
-                        <th scope="col">Descrição</th>
-                        <th scope="col">Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <c:forEach var="t" items="${lista}">
-                        <tr>
-                            <th scope="row">${t.id}</th>
-                            <td>${t.nome}</td>
-                            <td>${t.descricao}</td>
-                            <td>
-                                <a href="editar?id=${t.id}" class="btn btn-warning btn-sm" aria-label="Editar tarefa ${t.nome}">Editar</a>
-                                <a href="excluir?id=${t.id}" class="btn btn-danger btn-sm" aria-label="Excluir tarefa ${t.nome}" onclick="return confirm('Tem certeza que deseja excluir?');">Excluir</a>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                </tbody>
-            </table>
-        </c:when>
-        <c:otherwise>
-            <div class="alert alert-warning" role="alert">Não há tarefas cadastradas.</div>
-        </c:otherwise>
-    </c:choose>
-</main>
+    <div class="row">
+        <!-- Verifica se a lista de tarefas n�o est� vazia -->
+        <c:forEach var="tarefa" items="${tarefas}">
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">${tarefa.nome}</h5>
+                        <p class="card-text">${tarefa.descricao}</p>
+                        <a href="form-editar.jsp?id=${tarefa.id}" class="btn btn-warning">Editar</a>
+                        <a href="tarefa?acao=excluir&id=${tarefa.id}" class="btn btn-danger">Excluir</a>
+                    </div>
+                </div>
+            </div>
+        </c:forEach>
+        <!-- Caso n�o haja tarefas -->
+        <c:if test="${empty tarefas}">
+            <div class="alert alert-warning" role="alert">
+                Nenhuma tarefa encontrada.
+            </div>
+        </c:if>
+    </div>
+</div>
 
-<c:import url="footer.jsp" />
+<%@ include file="footer.jsp" %>
