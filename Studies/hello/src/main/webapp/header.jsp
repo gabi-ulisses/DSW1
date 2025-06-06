@@ -13,7 +13,8 @@
             <nav>
                 <ul class="nav">
                     <li class="nav-item"><a href="index.jsp" class="nav-link text-white">Criar Tarefa</a></li>
-                    <li class="nav-item"><a href="resposta.jsp" class="nav-link text-white">Ver Tarefas</a></li>
+                    <!-- Alterado para chamar o servlet que lista as tarefas -->
+                    <li class="nav-item"><a href="tarefa" class="nav-link text-white">Ver Tarefas</a></li>
                 </ul>
             </nav>
         </div>

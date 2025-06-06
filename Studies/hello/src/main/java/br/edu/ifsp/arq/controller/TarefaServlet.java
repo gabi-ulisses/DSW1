@@ -23,12 +23,32 @@ public class TarefaServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Ação GET, normalmente usado para listar as tarefas, ou mostrar um formulário
-        // Não está implementado em seu código, então podemos deixar vazio ou adicionar algo conforme necessário
+
+        String acao = request.getParameter("acao");
+
+        if ("carregar".equals(acao)) {
+            int id = Integer.parseInt(request.getParameter("id"));
+            Tarefa tarefa = dao.buscarPorId(id);
+
+            if (tarefa != null) {
+                request.setAttribute("tarefa", tarefa);
+                request.getRequestDispatcher("/form-editar.jsp").forward(request, response);
+            } else {
+                request.setAttribute("mensagem", "Tarefa não encontrada");
+                request.setAttribute("classe", "alert alert-danger");
+                request.getRequestDispatcher("/resposta.jsp").forward(request, response);
+            }
+
+        } else {
+            // Comportamento padrão: listar tarefas
+            request.setAttribute("lista", dao.getTarefas());
+            request.getRequestDispatcher("/resposta.jsp").forward(request, response);
+        }
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+    	System.out.println("POST recebido! Ação: " + request.getParameter("acao"));
 
         String acao = request.getParameter("acao");
         String msg = "";

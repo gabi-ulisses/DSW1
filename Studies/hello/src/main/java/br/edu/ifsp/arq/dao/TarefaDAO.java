@@ -19,17 +19,19 @@ public class TarefaDAO {
     private static TarefaDAO instance;
 
     // Caminho relativo para o arquivo
-    private static final String ARQUIVO = "data/saida.json";
+    private static final String ARQUIVO = "/Users/serviceup/Documents/DSW1/Studies/hello/data/saida.json";
 
     private TarefaDAO() {
+        // Extrai o diretório pai do caminho do arquivo
+        File f = new File(ARQUIVO);
+        File dir = f.getParentFile();  // pega a pasta "data"
+
         // Cria o diretório "data" se não existir
-        File dir = new File("data");
         if (!dir.exists()) {
             dir.mkdirs();
         }
 
         // Cria o arquivo "saida.json" se não existir
-        File f = new File(ARQUIVO);
         if (!f.exists()) {
             try {
                 f.createNewFile();
@@ -37,6 +39,8 @@ public class TarefaDAO {
                 e.printStackTrace();
             }
         }
+        
+        System.out.println("Caminho real do arquivo: " + f.getAbsolutePath());
     }
 
     public static TarefaDAO getInstance() {
@@ -46,17 +50,22 @@ public class TarefaDAO {
         return instance;
     }
 
+    // Adicionar tarefa com ID automático incremental
     public boolean adicionarTarefa(Tarefa t) {
-        Gson gson = new Gson();
-        try (FileWriter fw = new FileWriter(ARQUIVO, StandardCharsets.UTF_8, true);
-             PrintWriter pw = new PrintWriter(fw)) {
-            String json = gson.toJson(t);
-            pw.println(json);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
+        ArrayList<Tarefa> lista = getTarefas();
+        if (lista == null) {
+            lista = new ArrayList<>();
         }
-        return true;
+        // Determinar maior id atual
+        int maxId = 0;
+        for (Tarefa tarefa : lista) {
+            if (tarefa.getId() > maxId) {
+                maxId = tarefa.getId();
+            }
+        }
+        t.setId(maxId + 1);
+        lista.add(t);
+        return salvarLista(lista); // sobrescreve o arquivo inteiro
     }
 
     public ArrayList<Tarefa> getTarefas() {
@@ -128,4 +137,17 @@ public class TarefaDAO {
         }
         return salvarLista(lista);
     }
+    
+    public Tarefa buscarPorId(int id) {
+        ArrayList<Tarefa> lista = getTarefas();
+        if (lista != null) {
+            for (Tarefa t : lista) {
+                if (t.getId() == id) {
+                    return t;
+                }
+            }
+        }
+        return null;
+    }
+
 }
