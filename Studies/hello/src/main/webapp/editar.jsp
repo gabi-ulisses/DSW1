@@ -1,5 +1,8 @@
-<%@ include file="header.jsp" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<c:import url="header.jsp"></c:import>
 <div class="container">
     <h2>Editar Tarefa</h2>
 
@@ -13,12 +16,12 @@
         </div>
 
         <div class="mb-3">
-            <label for="descricao" class="form-label">Descrição:</label>
+            <label for="descricao" class="form-label">DescriÃ§Ã£o:</label>
             <textarea class="form-control" id="descricao" name="descricao" required>${tarefa.descricao}</textarea>
         </div>
 
-        <button type="submit" class="btn btn-warning">Atualizar Tarefa</button>
-    </form>
+    <button type="submit" class="btn btn-primary">Salvar</button>
+    <a href="tarefa" class="btn btn-secondary">Cancelar</a>    </form>
 </div>
 
-<%@ include file="footer.jsp" %>
+<c:import url="footer.jsp"></c:import>

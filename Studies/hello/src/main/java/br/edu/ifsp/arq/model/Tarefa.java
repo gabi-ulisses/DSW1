@@ -11,36 +11,46 @@ public class Tarefa implements Serializable {
     private String descricao;
 
     public Tarefa(int id, String nome, String descricao) {
-        this.id = id;
-        this.nome = nome;
-        this.descricao = descricao;
+       this.id = id;
+       setNome(nome);       
+       setDescricao(descricao); 
     }
 
     public Tarefa(String nome, String descricao) {
-        this(0, nome, descricao); // id será atribuído pelo DAO
+        setNome(nome);
+        setDescricao(descricao);
     }
 
-    // Getters e setters
     public int getId() {
         return id;
     }
+    
     public void setId(int id) {
         this.id = id;
     }
+    
     public String getNome() {
         return nome;
     }
+
     public void setNome(String nome) {
+        if (nome == null || nome.isBlank()) {
+            throw new IllegalArgumentException("O nome da tarefa não pode ser nulo ou em branco.");
+        }
         this.nome = nome;
     }
+
     public String getDescricao() {
         return descricao;
     }
+
     public void setDescricao(String descricao) {
+        if (descricao == null || descricao.isBlank()) {
+            throw new IllegalArgumentException("A descrição da tarefa não pode ser nula ou em branco.");
+        }
         this.descricao = descricao;
     }
 
-    // toString para CSV (id;nome;descricao)
     @Override
     public String toString() {
         return id + ";" + nome + ";" + descricao;

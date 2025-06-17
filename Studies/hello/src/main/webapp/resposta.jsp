@@ -1,8 +1,12 @@
-<%@ include file="header.jsp" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<c:import url="header.jsp" />
 
 <style>
-  /* Container máximo centralizado com espaçamento */
+  /* Container mï¿½ximo centralizado com espaï¿½amento */
   .container {
     max-width: 1200px;
     margin: 3rem auto;
@@ -73,7 +77,7 @@
     flex-grow: 1;
   }
 
-  /* Botões e formulários na linha */
+  /* Botï¿½es e formulÃ¡rios na linha */
   .task-actions {
     display: flex;
     gap: 0.75rem;
@@ -106,18 +110,14 @@
     background-color: #dc2626;
   }
 
-  /* Estilo para o formulário inline */
+  /* Estilo para o formulÃ¡rio inline */
   form {
-    margin: 0; /* Remove margens do formulário */
+    margin: 0; /* Remove margens do formulÃ¡rio */
   }
 </style>
 
 <div class="container">
   <h2>Lista de Tarefas</h2>
-
-  <c:if test="${not empty mensagem}">
-      <div class="alert ${classe}" role="alert">${mensagem}</div>
-  </c:if>
 
   <c:choose>
     <c:when test="${empty lista}">
@@ -134,7 +134,7 @@
             <div class="task-actions">
 			  <a class="btn btn-warning" href="tarefa?acao=carregar&id=${tarefa.id}">Editar</a>
 			
-			  <form action="tarefa" method="post" onsubmit="return confirm('Confirma exclusão?');">
+			  <form action="tarefa" method="post" onsubmit="return confirm('Confirma exclusÃ£o?');">
 			    <input type="hidden" name="acao" value="excluir" />
 			    <input type="hidden" name="id" value="${tarefa.id}" />
 			    <button type="submit" class="btn btn-danger">Excluir</button>
@@ -147,4 +147,4 @@
   </c:choose>
 </div>
 
-<%@ include file="footer.jsp" %>
+<c:import url="footer.jsp" />
