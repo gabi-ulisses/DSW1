@@ -1,5 +1,6 @@
 package br.edu.ifsp.arq.controller;
 
+import java.io.File;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,12 +16,20 @@ public class TarefaServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        String caminhoArquivo = "/WEB-INF/data/saida.json";
-        String caminhoReal = getServletContext().getRealPath(caminhoArquivo);
         
-        System.out.println("DEBUG: O caminho real do arquivo é: " + caminhoReal);
+        // Passo 1: Pega o diretório "home" do usuário que está rodando o servidor.
+        // Isso é portável: funciona em Windows, Linux, Mac, etc.
+        String userHome = System.getProperty("user.home");
+
+        // Passo 2: Constrói o caminho completo de forma segura.
+        // File.separator garante que a barra ("/" ou "\") correta será usada.
+        String caminhoArquivo = userHome + File.separator + "gabiulisses-eclipse-workspace/hello/src/main/webapp/data" + File.separator + "saida.json";
+
+        System.out.println("DEBUG: O caminho do arquivo de dados foi construído dinamicamente para: " + caminhoArquivo);
         
-        TarefaDAO.init(caminhoReal);
+        // Passo 3: O resto do código permanece idêntico.
+        // O DAO já está pronto para receber este caminho e criar as pastas necessárias.
+        TarefaDAO.init(caminhoArquivo);
         this.dao = TarefaDAO.getInstance();
     }
 
